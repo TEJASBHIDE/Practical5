@@ -5,7 +5,7 @@ pipeline {
         stage('Clone') {
             steps {
                 echo 'Cloning the repository...'
-                // Jenkins automatically clones from GitHub repo if configured correctly
+                // Repo already cloned by Jenkins
             }
         }
 
@@ -13,33 +13,32 @@ pipeline {
             steps {
                 script {
                     echo 'Building Docker image...'
-                    // Navigate into the node-app directory and build
                     dir('node-app') {
-                        sh 'docker build -t node-jenkins-app .'
+                        bat 'docker build -t node-jenkins-app .'
                     }
                 }
             }
         }
 
-       /* stage('Stop and Remove Existing Container') {
+        /* Optional Cleanup Stage
+        stage('Stop and Remove Existing Container') {
             steps {
                 script {
                     echo 'Stopping any existing container...'
-                    sh '''
-                    if [ $(docker ps -q -f name=node-jenkins-container) ]; then
-                        docker stop node-jenkins-container
-                        docker rm node-jenkins-container
-                    fi
+                    bat '''
+                    docker stop node-jenkins-container || exit 0
+                    docker rm node-jenkins-container || exit 0
                     '''
                 }
             }
-        }*/
+        }
+        */
 
         stage('Run Docker Container') {
             steps {
                 script {
                     echo 'Running Docker container...'
-                    sh 'docker run -d --name node-jenkins-container -p 3000:3000 node-jenkins-app'
+                    bat 'docker run -d --name node-jenkins-container -p 3000:3000 node-jenkins-app'
                 }
             }
         }
