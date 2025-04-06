@@ -14,12 +14,13 @@ pipeline {
         }
 
         stage('Build Docker Image') {
-            steps {
-                script {
-                    docker.build("${IMAGE_NAME} -f Dockerfile1 .")
-                }
-            }
+    steps {
+        script {
+            def customImage = docker.build("node-jenkins-app")
         }
+    }
+}
+
 
         stage('Stop Old Container') {
             steps {
