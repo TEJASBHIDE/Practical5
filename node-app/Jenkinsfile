@@ -2,9 +2,10 @@ pipeline {
     agent any
 
     stages {
-        stage('Clone Repo') {
+        stage('Clone') {
             steps {
-                git 'https://github.com/TEJASBHIDE/Practical5/edit/main/node-app'
+                echo 'Cloning the repository...'
+                // Jenkins automatically clones from GitHub repo if configured correctly
             }
         }
 
