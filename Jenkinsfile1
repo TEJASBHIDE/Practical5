@@ -2,45 +2,49 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = 'tejas-node-app'
-        CONTAINER_NAME = 'tejas-node-container'
-        PORT = '3000'
+        IMAGE_NAME = "node-jenkins-app"
+        CONTAINER_NAME = "node-jenkins-container"
     }
 
     stages {
         stage('Clone Repo') {
-    steps {
-        git branch: 'main', url: 'https://github.com/TEJASBHIDE/Practical5.git'
-    }
-}
+            steps {
+                git branch: 'main', url: 'https://github.com/TEJASBHIDE/Practical5.git'
+            }
+        }
 
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("${IMAGE_NAME}")
+                    docker.build("${IMAGE_NAME} -f Dockerfile1 .")
                 }
             }
         }
 
         stage('Stop Old Container') {
             steps {
-                sh 'docker rm -f ${CONTAINER_NAME} || true'
+                script {
+                    sh "docker stop ${CONTAINER_NAME} || true"
+                    sh "docker rm ${CONTAINER_NAME} || true"
+                }
             }
         }
 
         stage('Run New Container') {
             steps {
-                sh "docker run -d -p ${PORT}:${PORT} --name ${CONTAINER_NAME} ${IMAGE_NAME}"
+                script {
+                    sh "docker run -d -p 3000:3000 --name ${CONTAINER_NAME} ${IMAGE_NAME}"
+                }
             }
         }
     }
 
     post {
-        success {
-            echo '🎉 Build & Deploy Successful!'
-        }
         failure {
-            echo '❌ Something went wrong!'
+            echo "❌ Something went wrong!"
+        }
+        success {
+            echo "✅ Deployment Successful!"
         }
     }
 }
