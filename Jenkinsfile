@@ -3,10 +3,11 @@ pipeline {
 
     stages {
         stage('Clone Repository') {
-            steps {
-                git 'https://github.com/TEJASBHIDE/Practical5.git'
-            }
-        }
+    steps {
+        git branch: 'main', url: 'https://github.com/TEJASBHIDE/Practical5.git'
+    }
+}
+
 
         stage('Build Docker Image') {
             steps {
