@@ -20,20 +20,6 @@ pipeline {
             }
         }
 
-        /* Optional Cleanup Stage
-        stage('Stop and Remove Existing Container') {
-            steps {
-                script {
-                    echo 'Stopping any existing container...'
-                    bat '''
-                    docker stop node-jenkins-container || exit 0
-                    docker rm node-jenkins-container || exit 0
-                    '''
-                }
-            }
-        }
-        */
-
         stage('Run Docker Container') {
             steps {
                 script {
